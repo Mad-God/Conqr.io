@@ -1,0 +1,19 @@
+GAME CREATION:
+    considerations:
+        make everything a seperate object; dino, tree, game
+        make every event a diffrent method; jump, add tree, delete tree, collision, score?, 
+        make a mechanism to keep game status; score, number of trees jumped
+        make a restart feature; remove all trees; set score to zero, number of tress jumped zero
+
+
+TRAINING:
+    training:
+        considerations:
+            input to be given to the NN: next closest tree distance, speed, current position of dino
+            how to pass the output of the NN to the game: jump or not jump
+            update the inputs to be passed to the NN on every tick
+            calculate the fitness of the NN genome after game end or some interval
+            a mechanism to pass the genomes to the game
+            a mechanism to test the best NN genome
+        
+
