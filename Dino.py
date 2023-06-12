@@ -42,7 +42,6 @@ class Dino:
             self.time += 1
 
             if self.rect.y >= window.get_height() - self.dino.get_height():
-                print(self.rect.y)
                 self.rect.y = window.get_height() - self.dino.get_height()
                 self.jumping = False
                 self.velocity = self.INITIAL_VELOCITY
@@ -90,7 +89,6 @@ class Game:
 
     def add_tree(self):
         if random.choice([True, False, True]):
-            print("adding")
             tree = pygame.image.load(
                 os.path.join(BASE_DIR, "assets/dino/" + random.choice(self.TREE_LIST))
             )
@@ -113,7 +111,6 @@ class Game:
                 self.running = False
 
         self.screen.fill("white")
-        # print(time.time() - self.tree_timer, self.tree_frequency)
         if time.time() - self.tree_timer > self.tree_frequency:
             self.add_tree()
             self.tree_timer = time.time()
@@ -138,9 +135,9 @@ class Game:
                 self.screen.blit(tree, tree_rect)
                 # check if the tree is colliding with the dino
                 if self.dino.rect.colliderect(tree_rect):
-                    self.score = 0
-                    self.trees_crossed_count = 0
+                    self.running = False
                     pygame.draw.rect(self.screen, (0, 0, 0), tree_rect, 4)
+                    return self.score, self.trees_crossed_count
 
                 # check if this is the closest tree
                 if (
@@ -217,9 +214,12 @@ class Game:
 
     def run(self):
         while self.running:
-            self.draw()
+            stats = self.draw()
+        return stats
 
 
-game = Game()
-
-game.run()
+i = 0
+while i < 3:
+    game = Game()
+    print(game.run())
+    i += 1

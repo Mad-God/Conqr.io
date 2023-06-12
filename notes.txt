@@ -9,7 +9,7 @@ GAME CREATION:
 TRAINING:
     training:
         considerations:
-            input to be given to the NN: next closest tree distance, speed, current position of dino
+            input to be given to the NN: next closest tree distance, speed, current position of dino, score
             how to pass the output of the NN to the game: jump or not jump
             update the inputs to be passed to the NN on every tick
             calculate the fitness of the NN genome after game end or some interval
