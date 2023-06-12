@@ -62,7 +62,7 @@ class Game:
     TREE_HEIGHT = 100
     TREE_WIDTH = 100
 
-    FONT_SIZE = 140
+    FONT_SIZE = 50
     FONT_COLOR = (0, 0, 0)
     SCORE_WIDTH = 110
     SCORE_HEIGHT = 110
@@ -77,10 +77,12 @@ class Game:
         self.dino = Dino(self.screen)
 
         # trees
-        self.tree_velocity = 500
+        self.tree_velocity = 1000
         self.tree_frequency = 2.5
         self.tree_render_list = []
         self.tree_timer = time.time()
+        self.closest_tree = None
+        self.trees_crossed_count = 0
 
         # score
         self.score = 0
@@ -101,6 +103,7 @@ class Game:
                         self.TREE_WIDTH,
                         self.TREE_HEIGHT,
                     ),
+                    False,
                 )
             )
 
@@ -116,24 +119,65 @@ class Game:
             self.tree_timer = time.time()
 
         tree_list_update = []
+        closest_tree_found = False
+        # loop over all the trees presnt in our queue
+        self.closest_tree = None
         for i in range(len(self.tree_render_list)):
+            # take the tree and its enclosing rectangle
             tree = self.tree_render_list[i][0]
             tree_rect = self.tree_render_list[i][1]
+            tree_crossed = self.tree_render_list[i][2]
+
+            # ensure that the tree has not crossed the screen
             if tree_rect.x > -tree.get_width():
+                # move the tree leftwards
                 tree_rect.x -= self.tree_velocity * self.dt
+                # resize the tree
                 tree = pygame.transform.scale(tree, (self.TREE_WIDTH, self.TREE_HEIGHT))
+                # display the tree
                 self.screen.blit(tree, tree_rect)
+                # check if the tree is colliding with the dino
                 if self.dino.rect.colliderect(tree_rect):
                     self.score = 0
+                    self.trees_crossed_count = 0
                     pygame.draw.rect(self.screen, (0, 0, 0), tree_rect, 4)
 
-                tree_list_update.append(self.tree_render_list[i])
-        self.tree_render_list = tree_list_update
-        print(self.tree_render_list)
+                # check if this is the closest tree
+                if (
+                    not closest_tree_found
+                    and tree_rect.x > self.dino.rect.x + self.dino.dino.get_width()
+                ):
+                    self.closest_tree = (tree, tree_rect)
+                    closest_tree_found = True
 
+                # increase the number of trees crossed
+                if not tree_crossed and (
+                    tree_rect.x + tree.get_width() < self.dino.rect.x
+                ):
+                    self.trees_crossed_count += 1
+                    tree_crossed = True
+                # reinsert the tree to the queue
+                tree_list_update.append(
+                    (
+                        self.tree_render_list[i][0],
+                        self.tree_render_list[i][1],
+                        tree_crossed,
+                    )
+                )
+
+        self.tree_render_list = tree_list_update
         self.screen.blit(self.dino.dino, self.dino.rect)
 
         keys = pygame.key.get_pressed()
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.dino.rect.x = max(self.dino.rect.x - 300 * self.dt, 0)
+        if keys[pygame.K_d]:
+            self.dino.rect.x = min(
+                self.dino.rect.x + 300 * self.dt,
+                self.screen.get_width() - self.dino.dino.get_width(),
+            )
 
         self.dino.jump(self.screen, pygame.key.get_pressed()[pygame.K_SPACE])
 
@@ -147,7 +191,17 @@ class Game:
 
     def update_score(self):
         self.score += 0.5
-        text = self.font.render(str(int(self.score)), True, self.FONT_COLOR)
+        tree_dist = "-"
+        # tree_rect.x > self.dino.rect.x + self.dino.dino.get_width():
+        if self.closest_tree:
+            tree_dist = (
+                self.closest_tree[1].x - self.dino.rect.x - self.dino.dino.get_width()
+            )
+        text = self.font.render(
+            f"Score: {str(int(self.score))}, closest tree: {str(tree_dist)}, crossed: {self.trees_crossed_count}",
+            True,
+            self.FONT_COLOR,
+        )
         self.screen.blit(text, (self.SCORE_WIDTH, self.SCORE_HEIGHT))
 
     def level_up(self):
@@ -157,6 +211,9 @@ class Game:
             self.tree_velocity = 500 + self.score
         if self.tree_velocity > 1500:
             self.tree_velocity = 1500
+
+    def game_info(self):
+        return
 
     def run(self):
         while self.running:
