@@ -16,4 +16,44 @@ TRAINING:
             a mechanism to pass the genomes to the game
             a mechanism to test the best NN genome
         
+ 
+
+
+
+---------- TRAINING FLOW -------------
+
+cofiguration path for the NEAT config file
+
+run neat with those configs
+    initialize population
+    add a reporter
+    add stats
+    add checkpointer to store the best genome so far in the training
+
+    get the winner genome
+        set the game configuration
+        set the genome fitness
+        run the game to train ai
+            create a  neural network of the genome
+            run the game loop
+                get the game info
+                make the move
+                    use the neural net to predict move using the game info
+                    use the move to work the game
+                redraw the frame
+                if game has ended
+                    calculate fitness for the genome usinig the game info
+    pickle the best genome
+
+    test best network
+        open the best genome
+        make a neural network from the genome
+        set the game configurations
+        initialize the pong game
+        test ai
+            run the game loop
+            get the move from the genome's neural network
+            make the move
+            
+
 

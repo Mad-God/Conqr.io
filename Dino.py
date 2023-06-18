@@ -2,6 +2,7 @@ import pygame
 import time
 import os
 import random
+import sys
 
 BASE_DIR = os.getcwd()
 
@@ -184,7 +185,7 @@ class Game:
         # dt is delta time in seconds since last frame, used for framerate-
         self.clock.tick(60)  # limits FPS to 60
         pygame.display.flip()
-        self.dt = self.clock.tick(60) / 1000
+        self.dt = self.clock.tick(60) / 100
 
     def update_score(self):
         self.score += 0.5
@@ -210,7 +211,23 @@ class Game:
             self.tree_velocity = 1500
 
     def game_info(self):
-        return
+        return_dict = {}
+        return_dict["tree_velocity"] = self.tree_velocity
+        return_dict["tree_frequency"] = self.tree_frequency
+        return_dict["tree_render_list"] = self.tree_render_list
+        return_dict["tree_timer"] = self.tree_timer
+        return_dict["closest_tree"] = self.closest_tree
+        return_dict["trees_crossed_count"] = self.trees_crossed_count
+        return_dict["dino_position"] = self.dino.rect.y
+        return_dict["score"] = self.score
+        closest_tree_dist = 100000
+        if self.closest_tree:
+            closest_tree_dist = (
+                self.closest_tree[1].x - self.dino.rect.x - self.dino.dino.get_width()
+            )
+        return_dict["closest_tree_dist"] = closest_tree_dist
+
+        return return_dict
 
     def run(self):
         while self.running:
@@ -218,8 +235,8 @@ class Game:
         return stats
 
 
-i = 0
-while i < 3:
-    game = Game()
-    print(game.run())
-    i += 1
+# i = 0
+# while i < 3:
+#     game = Game()
+#     print(game.run())
+#     i += 1
