@@ -1,0 +1,121 @@
+{% comment %} <!-- index.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dino Game</title>
+        <style>
+            body {
+                background-color: #333333;
+            }
+    
+            #game-board {
+                margin: 0 auto;
+                width: 800px;
+                height: 400px;
+                background-color: #1a1a1a;
+                position: relative;
+            }
+    
+            #game-title {
+                text-align: center;
+                color: #ffffff;
+                font-size: 36px;
+                margin-top: 200px;
+            }
+        </style>
+    </head>
+<body>
+
+    
+    <div id="game-board">
+        <h1 id="game-title">Dino Game</h1>
+        <!-- Add your game landscape elements here -->
+    </div>
+    <textarea id="message-area" rows="5" cols="50" readonly></textarea><br>
+    <input type="text" id="message-input">
+    <button onclick="sendMessage()">Send</button>
+    
+    <script src="{% static 'socket.js' %}"></script>
+</body>
+</html> {% endcomment %}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Development in JavaScript</title>
+    <style>
+        #game-board {
+            width: 600px;
+            height: 400px;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <cavas id="game-board"></canvas>
+
+    <script>
+        // Game variables
+        var canvas;
+        var context;
+        var gameObjects = [];
+
+        // Game initialization
+        function init() {
+            canvas = document.getElementById("game-board");
+            context = canvas.getContext("2d");
+
+            // Create game objects
+            var player = {
+                x: 100,
+                y: 200,
+                width: 50,
+                height: 50,
+                color: "#ff0000",
+                draw: function() {
+                    context.fillStyle = this.color;
+                    context.fillRect(this.x, this.y, this.width, this.height);
+                },
+                update: function() {
+                    // Update player logic here
+                }
+            };
+
+            gameObjects.push(player);
+
+            // Start the game loop
+            gameLoop();
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Game update
+        function update() {
+            for (var i = 0; i < gameObjects.length; i++) {
+                gameObjects[i].update();
+            }
+        }
+
+        // Game rendering
+        function render() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (var i = 0; i < gameObjects.length; i++) {
+                gameObjects[i].draw();
+            }
+        }
+
+        // Initialize the game
+        init();
+    </script>
+</body>
+</html>
+
