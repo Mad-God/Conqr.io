@@ -231,7 +231,7 @@ class Game {
             "score": this.score,
             "closest_tree": closest_tree_dist
         }
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
         sendMessage(JSON.stringify(data))
     }
 
@@ -271,6 +271,7 @@ var checkOverlappingInterval = setInterval(() => {
         clearInterval(purgeTreesInterval)
         clearInterval(setClosestTreeInterval)
         window.removeEventListener("keydown", handleJump);
+        console.log("game over")
 
 
     } else {

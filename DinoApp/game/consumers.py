@@ -3,6 +3,8 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
 from datetime import datetime
 
+from game.utils import *
+
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -17,6 +19,8 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):  # for when the client sends messages
+        # group send code
+        """
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -25,6 +29,20 @@ class ChatConsumer(WebsocketConsumer):
                 "sender": "Anonymous",
             },
         )
+        """
+
+        data = json.loads(text_data)
+        if type(data["position"]) != int:
+            return
+
+        response = get_ai_move(
+            dino_position=data["position"],
+            tree_disctance=data["closest_tree"],
+            score=data["score"],
+            trees_crossed=data["crossed"],
+        )
+
+        self.send(json.dumps({"jump": response}))
 
     def chat_message(self, event):
         self.send(event["message"])

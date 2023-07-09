@@ -1,4 +1,4 @@
-const messageArea = document.getElementById('message-area');
+const messageArea = document.getElementById('recieved-message');
 const messageInput = document.getElementById('message-input');
 
 // WebSocket connection
@@ -11,9 +11,9 @@ socket.onopen = function () {
 
 
 socket.onmessage = function (e) {
-    const message = e.data;
-    console.log('Received message:', message);
-    // messageArea.value += message + '\n';
+    var message = e.data;
+    // console.log('Received message:', message);
+    game.jump()
 };
 
 socket.onclose = function (e) {
@@ -23,7 +23,7 @@ socket.onclose = function (e) {
 // Send message to the server
 function sendMessage(message) {
     // const message = messageInput.value;
-    console.log('Sent message:', message);
+    // console.log('Sent message:', message);
     socket.send(message);
     // messageInput.value = '';
 }
