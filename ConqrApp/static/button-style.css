@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    background-color: #272727;
+}
+
+.center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+body {
+    background-color: #333333;
+    display: flex;
+}
+
+#grid {
+    position: fixed;
+    width: 98%;
+    height: 70%;
+    border: 10px solid #ccc;
+    padding: 5%;
+}
+
+#game-title {
+    text-align: center;
+    color: #ffffff;
+    font-size: 36px;
+    margin-top: 50px;
+
+}
+
+.hexagon {
+    width: 45px;
+    /* background-color: #30cc57; */
+    background-image: linear-gradient(90deg, #84cfe5, #05a9f5);
+    ;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    clip-path: polygon(50% 0%, 90% 25%, 90% 75%, 50% 100%, 10% 75%, 10% 25%);
+    /* Hexagon shape */
+}

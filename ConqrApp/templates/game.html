@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dino Game</title>
+        {% comment %} <link rel="stylesheet" type="text" href = "{% static 'button-style.css' %}"> {% endcomment %}
+        <link rel="stylesheet" href="{% static 'button-style.css' %}">
+
+    </head>
+<body>
+
+    
+    <div id="grid">
+    </div>
+    {% comment %} <script scr="static/put-board.js"/> {% endcomment %}
+    <script src="{% static 'put-board.js' %}"></script>
+    <script src="{% static 'socket.js' %}"></script>
+
+</body>
+</html>
