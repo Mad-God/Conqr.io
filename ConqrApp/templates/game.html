@@ -2,19 +2,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Dino Game</title>
+        <title>Conqr.IO</title>
         {% comment %} <link rel="stylesheet" type="text" href = "{% static 'button-style.css' %}"> {% endcomment %}
-        <link rel="stylesheet" href="{% static 'button-style.css' %}">
+        <link rel="stylesheet" href="{% static 'game-style.css' %}">
+        <link rel="stylesheet" href="{% static 'toastify.css' %}">
 
     </head>
 <body>
 
     
     <div id="grid">
+        <button class="menu-button button"><a href="/"> Menu</a></button >
     </div>
+    <div id="snackbar"></div>
     {% comment %} <script scr="static/put-board.js"/> {% endcomment %}
-    <script src="{% static 'put-board.js' %}"></script>
     <script src="{% static 'socket.js' %}"></script>
+    <script src="{% static 'put-board.js' %}"></script>
+    <script src="{% static 'toast.js' %}"></script>
 
 </body>
 </html>

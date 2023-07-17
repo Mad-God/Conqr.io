@@ -22,20 +22,21 @@ function put_button(container, position) {
     hexagon.addEventListener('contextmenu', rightMouseClickEvent);
 }
 
+
 // Get the div element
 const divElement = document.querySelector('.my-div');
 
 const leftMouseClickEvent = function (event) {
     if (event.button === 0) {
-        this.style.backgroundImage = BOMB_PLANTED_COLOR
-        sendMessage(JSON.stringify({ "id": this.id, 'sender': SOCKET_ID }))
+        this.style.backgroundImage = CLAIMED_COLOR
+        sendMessage(JSON.stringify({ "id": this.id, 'sender': SOCKET_ID, 'bombed': false }))
     }
 }
 
 const rightMouseClickEvent = function (event) {
     event.preventDefault();
-    this.style.backgroundImage = CLAIMED_COLOR
-    sendMessage(JSON.stringify({ "id": this.id, 'sender': SOCKET_ID }))
+    this.style.backgroundImage = BOMB_PLANTED_COLOR
+    sendMessage(JSON.stringify({ "id": this.id, 'sender': SOCKET_ID, 'bombed': true }))
 }
 
 
@@ -89,5 +90,3 @@ var columns = 5;
 var hex_id = 0;
 
 add_hexagons(rows = rows, columns = columns)
-
-

@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.index),
+    path("join-lobby/", views.game),
+    path("get-lobby-id/", views.get_lobby),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 websocket_urlpatterns = [

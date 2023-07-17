@@ -5,3 +5,6 @@ NEAT-Pong-Python-main/*
 __pycache__
 *__pycache__*
 *\*.pyc
+*/migrations/*
+*\migrations\*
+migrations
