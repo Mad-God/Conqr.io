@@ -29,14 +29,12 @@ def get_lobby(request):
             print(qs)
             if qs.exists():
                 room = qs[0]
-            
-        # try:
-        # except:
-        #     pass
     if request_type == "spectate":
         room = Room.objects.create(room_type = "allai")
     if request_type == "create":
         room = Room.objects.create(room_type = "pvp")
+        room.board = room.board[0:26]+"1"+room.board[27:34] + "3"+room.board[35:]
+        room.save()
     if not room:
         print("adding message")
         messages.add_message(request, messages.INFO, "Room invalid")

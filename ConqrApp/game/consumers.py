@@ -62,13 +62,21 @@ class GameConsumer(WebsocketConsumer):
                     "message": "You are now connected",
                     "player_id": player_id,
                     "board": room.board,
-                    "type": "connected",
+                    "msg-type": "connected",
                 }
             )
         )
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name,
+        )
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                "type": "chat_message",
+                "msg-type": "player-connect",
+                "player-id": player_id
+            },
         )
 
     def receive(self, text_data):
