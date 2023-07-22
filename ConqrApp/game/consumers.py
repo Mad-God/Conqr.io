@@ -2,7 +2,9 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
 from datetime import datetime
-from game.models import Room
+# from game.models import Room
+
+print("consumers")
 
 # from game.utils import *
 def print_board(board):
@@ -27,6 +29,7 @@ def print_board(board):
 
 class GameConsumer(WebsocketConsumer):
     def connect(self):
+        from game.models import Room
 
         # get the rom id from params
         params = self.scope["query_string"].decode("utf-8")
@@ -80,6 +83,8 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
+        from game.models import Room
+
         data = json.loads(text_data)
         print(data)
         
@@ -116,9 +121,12 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def chat_message(self, event):
+        from game.models import Room
+
         self.send(json.dumps(event))
 
     def disconnect(self, *args, **kwargs):
+        from game.models import Room
         try:
             # get the current room 
             room = Room.objects.get(id=self.room_id)

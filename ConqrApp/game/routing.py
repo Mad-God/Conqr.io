@@ -1,10 +1,12 @@
 # routing.py
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import path
-from game.consumers import ChatConsumer
+from game.consumers import GameConsumer
 from channels.auth import AuthMiddlewareStack
 from django.core.asgi import get_asgi_application
 
+
+print("rounting")
 
 application = ProtocolTypeRouter(
     {
@@ -12,7 +14,7 @@ application = ProtocolTypeRouter(
         "websocket": AuthMiddlewareStack(
             URLRouter(
                 [
-                    path("ws/chat/", ChatConsumer.as_asgi()),
+                    path("ws/game-socket/", GameConsumer.as_asgi()),
                 ]
             )
         ),

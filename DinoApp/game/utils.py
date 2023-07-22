@@ -3,8 +3,8 @@ import neat
 import os
 
 
-PICKLE_FILE_PATH = "..\\best.pickle"
-CONFIG_FILE_PATH = "..\\config.txt"
+PICKLE_FILE_PATH = "../best.pickle"
+CONFIG_FILE_PATH = "../config.txt"
 
 with open(PICKLE_FILE_PATH, "rb") as f:
     winner = pickle.load(f)
