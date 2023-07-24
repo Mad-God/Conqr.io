@@ -5,6 +5,7 @@ html {
     padding: 0;
     background-color: #222;
     color: #fff;
+    font-family: Arial, sans-serif;
 }
 
 header {
@@ -74,4 +75,37 @@ button:hover {
     h2 {
         font-size: 20px;
     }
+}
+
+
+#header {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 10px;
+    max-width: 100%;
+}
+
+#header h1 {
+    margin: 0;
+}
+
+#content {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Add responsive styles */
+@media screen and (max-width: 600px) {
+    #header {
+        font-size: 18px;
+    }
+}
+
+.badge {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 5px;
 }

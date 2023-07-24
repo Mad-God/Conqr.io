@@ -4,7 +4,6 @@ from asgiref.sync import async_to_sync, sync_to_async
 from datetime import datetime
 # from game.models import Room
 
-print("consumers")
 
 # from game.utils import *
 def print_board(board):
@@ -14,7 +13,6 @@ def print_board(board):
     cols = 5
     for i in range(9):
         print(" "*(9-cols), end="")
-        # print(cols)
         for j in range(cols):
             print(board[ind], end=" ")
             ind +=1
@@ -43,6 +41,7 @@ class GameConsumer(WebsocketConsumer):
         
         if room.first_player_joined and room.second_player_joined:
             print("no vacancy; connection refused")
+            self.close()
             return
             
         
@@ -66,6 +65,7 @@ class GameConsumer(WebsocketConsumer):
                     "player_id": player_id,
                     "board": room.board,
                     "msg-type": "connected",
+                    "both-player-joined":room.first_player_joined and room.second_player_joined
                 }
             )
         )
@@ -86,7 +86,6 @@ class GameConsumer(WebsocketConsumer):
         from game.models import Room
 
         data = json.loads(text_data)
-        print(data)
         
         room = Room.objects.get(id = self.room_id)
         if data.get("type") == "heartbeat":

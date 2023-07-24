@@ -5,22 +5,17 @@ document.getElementById('join').querySelector('button').addEventListener('click'
 });
 
 document.getElementById('spectate').querySelector('button').addEventListener('click', function () {
-    var lobby = getLobby({ 'type': "spectate" });
+    // var lobby = getLobby({ 'type': "spectate" });
 });
 
 document.getElementById('vs-ai').querySelector('button').addEventListener('click', function () {
-    var lobby = getLobby({ 'type': "vs-ai" });
+    // var lobby = getLobby({ 'type': "vs-ai" });
 });
 
 document.getElementById('vs-player').querySelector('button').addEventListener('click', function () {
     var lobby = getLobby({ 'type': "create" });
-    // if
-    // console.log(lobby)
-    // goToLobby(lobby);
 });
 function goToLobby(lobby) {
-    var domain = window.location.origin.split('/')[2]
-    console.log(domain, "/join-lobby?room_id=", lobby)
     window.location.replace("/join-lobby?room_id=" + lobby);
 }
 
@@ -37,12 +32,10 @@ function getLobby(params) {
             if ("room_id" in data) {
                 if (data["room_id"] != undefined) {
                     var lobby = data["room_id"]
-                    console.log(lobby)
                     goToLobby(lobby)
                 }
                 else {
                     showToast("Room Not Valid")
-                    console.log("room invalid")
                 }
             }
         })

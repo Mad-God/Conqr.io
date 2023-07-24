@@ -5,9 +5,6 @@ from game.consumers import GameConsumer
 from channels.auth import AuthMiddlewareStack
 from django.core.asgi import get_asgi_application
 
-
-print("rounting")
-
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),

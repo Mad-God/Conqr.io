@@ -4,18 +4,33 @@
     <head>
         <title>Conqr.IO</title>
         {% comment %} <link rel="stylesheet" type="text" href = "{% static 'button-style.css' %}"> {% endcomment %}
+        <link rel="stylesheet" href="{% static 'index.css' %}">
         <link rel="stylesheet" href="{% static 'game-style.css' %}">
         <link rel="stylesheet" href="{% static 'toastify.css' %}">
 
     </head>
 <body>
-
+    <div>
+        <div id="header">
+            
+            <button class="badge"><a href="/"> Menu</a></button >
+                <span class="badge" id="player-info">You're player: </span >
+                    <span class="badge" id="claim-info">Claimed: </span >
+                        <span class="badge" id="lost-info">Lost: </span >
+        </div>
+    {% comment %} <div id="header">
+        <div class="badge">Data Point 1</div>
+        <div class="badge">Data Point 2</div>
+        <div class="badge">Data Point 3</div>
+        <div class="badge">Data Point 4</div>
+      </div> {% endcomment %}
     
     <div id="grid">
-        <button class="menu-button button"><a href="/"> Menu</a></button >
+
+        
     </div>
     <div id="snackbar"></div>
-    {% comment %} <script scr="static/put-board.js"/> {% endcomment %}
+    <script src="{% static 'grid.js' %}"/></script>
     <script src="{% static 'put-board.js' %}"></script>
     <script src="{% static 'socket.js' %}"></script>
     <script src="{% static 'toast.js' %}"></script>
