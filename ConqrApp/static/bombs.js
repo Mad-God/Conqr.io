@@ -4,15 +4,6 @@ const addBomb = function (div) {
         showToast("Bombs not available !")
         return;
     }
-    // if (div.style.backgroundImage != CLAIMED_COLOR && div.style.backgroundImage != BOMB_PLANTED_COLOR) {
-    //     CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1
-    //     if (div.style.backgroundImage == LOST_COLOR) {
-    //         LOST_COUNT -= 1
-    //     }
-    // }
-    // if (div.style.backgroundImage != BOMB_PLANTED_COLOR) {
-    //     BOMB_COUNT -= 1;
-    // }
     div.style.backgroundImage = BOMB_PLANTED_COLOR
     var neighbors = getNeighbors(div.id);
     for (var i = 0; i < neighbors.length; i++) {
@@ -20,19 +11,11 @@ const addBomb = function (div) {
     }
     sendMessage(JSON.stringify({ "id": div.id, 'sender': SOCKET_ID, 'bombed': true }))
     updateInformation();
+    BOMB_COUNT -= 1
 }
 
 
 const addClaim = function (div) {
-    // if (div.style.backgroundImage == LOST_COLOR) {
-    //     CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1
-    //     LOST_COUNT -= 1
-    //     updateInformation();
-    // }
-    // else if (div.style.backgroundImage == BOMB_PLANTED_COLOR) {
-    //     BOMB_COUNT += 1
-    //     updateInformation();
-    // }
     div.style.backgroundImage = CLAIMED_COLOR
     var neighbors = getNeighbors(div.id);
     for (var i = 0; i < neighbors.length; i++) {
@@ -54,12 +37,6 @@ const addLost = function (div, is_bombed = false) {
         }
         return
     }
-    // if (div.style.backgroundImage != LOST_COLOR) {
-    //     LOST_COUNT = Number(LOST_COUNT) + 1;
-    //     if (div.style.backgroundImage == CLAIMED_COLOR || div.style.backgroundImage == BOMB_PLANTED_COLOR) {
-    //         CLAIMED_COUNT -= 1;
-    //     }
-    // }
     div.style.backgroundImage = LOST_COLOR
     var neighbors = getNeighbors(div.id);
     for (var i = 0; i < neighbors.length; i++) {
@@ -71,15 +48,7 @@ const addLost = function (div, is_bombed = false) {
 
 
 const neutraliseDiv = function (div, is_bombed = false) {
-    console.log("nutralising div: ", div.id, div)
-    // if (div.style.backgroundImage == LOST_COLOR) {
-    //     LOST_COUNT = Number(LOST_COUNT) - 1;
-    // }
-    // else if (div.style.backgroundImage == CLAIMED_COLOR || div.style.backgroundImage == BOMB_PLANTED_COLOR) {
-    //     CLAIMED_COUNT = Number(CLAIMED_COUNT) - 1;
-    // }
     div.style.backgroundImage = DISABLED_COLOR
-    // activateSelfComplete(div.id)
     if (is_bombed) {
         sendMessage(JSON.stringify({ "type": 'neutralise', 'sender': SOCKET_ID, 'id': div.id }))
     }
@@ -145,10 +114,3 @@ function issueBomb() {
     }
 }
 
-
-
-
-
-// setInterval(issueBomb, ISSUE_RATE * 1000)
-
-// setInterval(syncBombs, 1000);

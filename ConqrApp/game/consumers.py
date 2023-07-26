@@ -89,7 +89,8 @@ class GameConsumer(WebsocketConsumer):
         from game.models import Room
         is_neutralised = False
         data = json.loads(text_data)
-        
+        will_explode = False
+        will_neutralise = False
         room = Room.objects.get(id = self.room_id)
         board = room.board
         
@@ -118,13 +119,21 @@ class GameConsumer(WebsocketConsumer):
         else:
             if data['sender'] == 1:
                 if data["bombed"]:
+                    if board[int(data["id"])] == "4":
+                        will_neutralise = True                        
                     board = board[:int(data["id"])] + "2" + board[int(data["id"])+1:]
                 else:
+                    if board[int(data["id"])] == "4":
+                        will_explode = True                        
                     board = board[:int(data["id"])] + "1" + board[int(data["id"])+1:]
             if data['sender'] == 2:
                 if data["bombed"]:
+                    if board[int(data["id"])] == "4":
+                        will_neutralise = True                        
                     board = board[:int(data["id"])] + "4" + board[int(data["id"])+1:]
                 else:
+                    if board[int(data["id"])] == "2":
+                        will_explode = True                        
                     board = board[:int(data["id"])] + "3" + board[int(data["id"])+1:]
         room.board = board
         room.save()
@@ -138,6 +147,9 @@ class GameConsumer(WebsocketConsumer):
                 "is_neutralised": is_neutralised
             },
         )
+
+        if will_explode or will_neutralise:
+            return
         first_player_alive = False
         second_player_alive = False
         for i in room.board:
