@@ -49,9 +49,11 @@ class GameConsumer(WebsocketConsumer):
         if not room.first_player_joined:
             player_id = 1
             room.first_player_joined = True
+            bomb_count = room.first_player_bomb
         elif not room.second_player_joined:
             player_id = 2
             room.second_player_joined = True
+            bomb_count = room.second_player_bomb
         room.save()
         
         # set socket room id and group name
@@ -65,7 +67,8 @@ class GameConsumer(WebsocketConsumer):
                     "player_id": player_id,
                     "board": room.board,
                     "msg-type": "connected",
-                    "both-player-joined":room.first_player_joined and room.second_player_joined
+                    "both-player-joined":room.first_player_joined and room.second_player_joined,
+                    "player-bomb-count":bomb_count
                 }
             )
         )
@@ -84,10 +87,12 @@ class GameConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         from game.models import Room
-
+        is_neutralised = False
         data = json.loads(text_data)
         
         room = Room.objects.get(id = self.room_id)
+        board = room.board
+        
         if data.get("type") == "heartbeat":
             player_id = data["sender"]
             if player_id == 1:
@@ -96,28 +101,73 @@ class GameConsumer(WebsocketConsumer):
                 room.second_player_joined = True
             room.save()
             return
-        board = room.board
-        if data['sender'] == 1:
-            if data["bombed"]:
-                board = board[:int(data["id"])] + "2" + board[int(data["id"])+1:]
+        elif data.get("type") == "bomb-sync":
+            player_id = data["sender"]
+            if player_id == 1:
+                room.first_player_bomb = data["bomb_count"]
+            elif player_id == 2:
+                room.second_player_bomb = data["bomb_count"]
             else:
-                board = board[:int(data["id"])] + "1" + board[int(data["id"])+1:]
-        if data['sender'] == 2:
-            if data["bombed"]:
-                board = board[:int(data["id"])] + "4" + board[int(data["id"])+1:]
-            else:
-                board = board[:int(data["id"])] + "3" + board[int(data["id"])+1:]
+                return
+            room.save()
+            return
+        elif data.get("type") == "neutralise":
+            print("neutralising div:", data)
+            board = board[:int(data["id"])] + "0" + board[int(data["id"])+1:]
+            is_neutralised = True
+        else:
+            if data['sender'] == 1:
+                if data["bombed"]:
+                    board = board[:int(data["id"])] + "2" + board[int(data["id"])+1:]
+                else:
+                    board = board[:int(data["id"])] + "1" + board[int(data["id"])+1:]
+            if data['sender'] == 2:
+                if data["bombed"]:
+                    board = board[:int(data["id"])] + "4" + board[int(data["id"])+1:]
+                else:
+                    board = board[:int(data["id"])] + "3" + board[int(data["id"])+1:]
         room.board = board
         room.save()
-        print_board(room.board)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 "type": "chat_message",
                 "div-id": data["id"],
                 "sender": data["sender"],
+                "is_bombed": data.get("bombed", False),
+                "is_neutralised": is_neutralised
             },
         )
+        first_player_alive = False
+        second_player_alive = False
+        for i in room.board:
+            if i == "1" or i == "2":
+                first_player_alive = True
+            if i == "3" or i == "4":
+                second_player_alive = True
+        if not first_player_alive:
+            print("game over")
+            async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                "type": "chat_message",
+                "msg-type": "game-over",
+                "loser":1
+            },
+        )
+        if not second_player_alive:
+            print("game over")
+            async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                "type": "chat_message",
+                "msg-type": "game-over",
+                "loser":2
+            },
+        )
+        
+            
+            
 
     def chat_message(self, event):
         from game.models import Room

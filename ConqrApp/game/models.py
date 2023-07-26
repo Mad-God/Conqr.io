@@ -19,3 +19,5 @@ class Room(models.Model):
     first_player_joined = models.BooleanField(default=False)
     second_player_joined = models.BooleanField(default=False)
     board = models.CharField(max_length=61, default="0"*61)
+    first_player_bomb = models.IntegerField(default=0)
+    second_player_bomb = models.IntegerField(default=0)

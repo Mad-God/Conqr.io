@@ -1,6 +1,5 @@
 
 function getGridElement(id) {
-    console.log(GRID, id)
     for (var i = 0; i < GRID.length; i++) {
         for (var j = 0; j < GRID[i].length; j++) {
             if (GRID[i][j][0] == id) {
@@ -20,7 +19,6 @@ function getNeighbors(id) {
     var ind = 0;
     var neighbors = new Array()
     var ele = getGridElement(id)
-    console.log(ele)
     for (var i = 0; i < GRID.length; i++) {
         // for the above elements
         if (i + 1 < GRID.length && GRID[i + 1][0][1] == ele[1]) {

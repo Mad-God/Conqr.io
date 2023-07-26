@@ -15,8 +15,10 @@
             
             <button class="badge"><a href="/"> Menu</a></button >
                 <span class="badge" id="player-info">You're player: </span >
-                    <span class="badge" id="claim-info">Claimed: </span >
-                        <span class="badge" id="lost-info">Lost: </span >
+                <span class="badge" id="claim-info">Claimed: </span >
+                <span class="badge" id="lost-info">Lost: </span >
+                <span class="badge" id="bomb-info">Bombs Available: </span >
+
         </div>
     {% comment %} <div id="header">
         <div class="badge">Data Point 1</div>
@@ -30,10 +32,10 @@
         
     </div>
     <div id="snackbar"></div>
-    <script src="{% static 'grid.js' %}"/></script>
-    <script src="{% static 'put-board.js' %}"></script>
-    <script src="{% static 'socket.js' %}"></script>
-    <script src="{% static 'toast.js' %}"></script>
-
+    <script src="{% static 'bombs.js' %}" defer></script>
+    <script src="{% static 'socket.js' %}" defer></script>
+    <script src="{% static 'put-board.js' %}" defer></script>
+    <script src="{% static 'grid.js' %}" defer/></script>
+    <script src="{% static 'toast.js' %}" defer></script>
 </body>
 </html>

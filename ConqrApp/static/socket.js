@@ -21,6 +21,8 @@ var onmessage = function (e) {
     var message = JSON.parse(e.data);
 
     console.log('Received message:', message);
+
+
     // if the user has joined initially
     if (message['msg-type'] === "connected") {
         SOCKET_ID = message['player_id']
@@ -40,7 +42,9 @@ var onmessage = function (e) {
         if (message["both-player-joined"]) {
             OPPENENT_JOINED = true;
         }
+        BOMB_COUNT = message["player-bomb-count"]
     }
+
     // if lobby could not be joined
     else if (message['msg-type'] === "failed") {
         SOCKET_ID = message['id']
@@ -68,10 +72,23 @@ var onmessage = function (e) {
         }
     }
 
+    else if (message["msg-type"] == 'game-over') {
+        showGameOverModal(lost = message['loser'] == SOCKET_ID)
+    }
+
     // make a move on the board
     else {
         var targetDiv = document.getElementById(message['div-id'].toString())
-        addLost(targetDiv)
+        var is_bombed = message["is_bombed"]
+        if (message["is_neutralised"]) {
+            neutraliseDiv(targetDiv)
+            setTimeout(() => {
+                activateSelfComplete(targetDiv.id)
+            }, 1000)
+        }
+        else {
+            addLost(targetDiv, is_bombed)
+        }
     }
 };
 
@@ -111,10 +128,10 @@ function updateBoard(boardString) {
         } else if (boardString[i] == "1") {
             if (SOCKET_ID == 1) {
                 hexagon.style.backgroundImage = CLAIMED_COLOR
-                CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
+                // CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
             } else {
                 hexagon.style.backgroundImage = LOST_COLOR
-                LOST_COUNT = Number(LOST_COUNT) + 1;
+                // LOST_COUNT = Number(LOST_COUNT) + 1;
                 if (!activateSelfFromGrid(id, boardString)) {
                     hexagon.removeEventListener('click', leftMouseClickEvent);
                     hexagon.removeEventListener('contextmenu', rightMouseClickEvent);
@@ -123,10 +140,10 @@ function updateBoard(boardString) {
         } else if (boardString[i] == "2") {
             if (SOCKET_ID == 1) {
                 hexagon.style.backgroundImage = BOMB_PLANTED_COLOR
-                CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
+                // CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
             } else {
                 hexagon.style.backgroundImage = LOST_COLOR
-                LOST_COUNT = Number(LOST_COUNT) + 1;
+                // LOST_COUNT = Number(LOST_COUNT) + 1;
                 if (!activateSelfFromGrid(id, boardString)) {
                     hexagon.removeEventListener('click', leftMouseClickEvent);
                     hexagon.removeEventListener('contextmenu', rightMouseClickEvent);
@@ -135,10 +152,10 @@ function updateBoard(boardString) {
         } else if (boardString[i] == "3") {
             if (SOCKET_ID == 2) {
                 hexagon.style.backgroundImage = CLAIMED_COLOR
-                CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
+                // CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
             } else {
                 hexagon.style.backgroundImage = LOST_COLOR
-                LOST_COUNT = Number(LOST_COUNT) + 1;
+                // LOST_COUNT = Number(LOST_COUNT) + 1;
                 if (!activateSelfFromGrid(id, boardString)) {
                     hexagon.removeEventListener('click', leftMouseClickEvent);
                     hexagon.removeEventListener('contextmenu', rightMouseClickEvent);
@@ -147,10 +164,10 @@ function updateBoard(boardString) {
         } else if (boardString[i] == "4") {
             if (SOCKET_ID == 2) {
                 hexagon.style.backgroundImage = BOMB_PLANTED_COLOR
-                CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
+                // CLAIMED_COUNT = Number(CLAIMED_COUNT) + 1;
             } else {
                 hexagon.style.backgroundImage = LOST_COLOR
-                LOST_COUNT = Number(LOST_COUNT) + 1;
+                // LOST_COUNT = Number(LOST_COUNT) + 1;
                 if (!activateSelfFromGrid(id, boardString)) {
                     hexagon.removeEventListener('click', leftMouseClickEvent);
                     hexagon.removeEventListener('contextmenu', rightMouseClickEvent);
