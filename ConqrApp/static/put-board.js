@@ -1,3 +1,4 @@
+const GLOBAL_TILE_COUNT = 61
 BOMB_PLANTED_COLOR = 'linear-gradient(90deg, rgb(43 131 78), rgb(10 77 0))'
 BOMB_PLANTED_COLOR = 'linear-gradient(90deg, rgb(43, 131, 78), rgb(10, 77, 0))'
 CLAIMED_COLOR = 'linear-gradient(90deg, #70eb98, #09bb23)'
@@ -139,13 +140,25 @@ add_hexagons(rows = rows, columns = columns)
 
 
 
-setInterval(issueBomb, ISSUE_RATE * 1000)
+const issue_bomb_interval = setInterval(issueBomb, ISSUE_RATE * 1000)
 
-setInterval(syncBombs, 1000);
+const sync_bombs_interval = setInterval(syncBombs, 1000);
+
+
+function endGameViaTimeout() {
+    var payLoad = {}
+
+    sendMessage(JSON.stringify(payLoad))
+    showGameOverModal("Time Up !!")
+}
 
 
 
-function showGameOverModal(lost) {
+
+function showGameOverModal(lost, message = "") {
+    if (message) {
+        showPopUp(message)
+    }
     if (lost) {
         showPopUp("You lose :(")
     }
@@ -203,3 +216,7 @@ function showPopUp(textContent) {
 
 // Call the function to show the pop-up dialog
 // showPopUp();
+
+
+
+// setTimeout(endGameViaTimeout, 20 * 1000)
