@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dino Game</title>
+        <style>
+            body {
+                background-color: #333333;
+                display: flex;
+            }
+    
+            #game-board {
+                margin: 0 auto;
+                width: 800px;
+                height: 400px;
+                background-color: #1a1a1a;
+                position: relative;
+            }
+    
+            #game-title {
+                text-align: center;
+                color: #ffffff;
+                font-size: 36px;
+                margin-top: 50px;
+
+            }
+            #grid {
+                position: fixed;
+                width: 98%;
+                height: 70%;    
+                border: 10px solid #ccc;
+            }
+            #grid img {
+            position: absolute;
+            left: 40%;
+            transform: translateX(-50%);
+            bottom: 0;
+            }
+            #dino {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
+              }
+            .info-list{
+                color: skyblue;
+                font-size: 16px;
+                margin-top: 25px;
+                padding-left: 45%;
+            }
+        </style>
+    </head>
+<body>
+
+    
+    <div id="grid">
+        <h1 id="game-title">Dino Game</h1>
+            <ul class="info-list game-info">
+                <li id="game-info-position">Dino position: </li>
+                <li id="game-info-tree">Closest Tree: </li>
+                <li id="game-info-score">Score: </li>
+                <li id="game-info-crossed">Trees Crossed: </li>
+                <li id="game-info-fail">FAIL</li>
+                <text id="recieved-message" class="message-box"></text>
+            </ul>
+    </div>
+
+
+    <script src="{% static 'socket.js' %}"></script>
+    <script src="{% static 'game.js' %}"></script>
+    
+</body>
+</html>
+
